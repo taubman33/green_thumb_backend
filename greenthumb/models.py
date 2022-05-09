@@ -2,18 +2,6 @@ from pyexpat import model
 from django.db import models
 
 # Create your models here.
-class User(models.Model):
-  name = models.CharField(max_length=256)
-  email = models.EmailField(max_length=256, blank=True, null=True)
-  username = models.CharField(max_length=256)
-  password = models.CharField(max_length=1024)
-  profile_img = models.CharField(max_length=512, blank=True, null=True)
-  pref_day1 = models.CharField(max_length=50)
-  pref_day2 = models.CharField(max_length=50, blank=True, null=True)
-  def __str__(self):
-    return self.name
-
-
 class Plant(models.Model):
   name = models.CharField(max_length=256)
   sci_name = models.CharField(max_length=512, blank=True, default='Not recorded')
@@ -26,7 +14,19 @@ class Plant(models.Model):
   humidity = models.CharField(max_length=50, blank=True, default='medium')
   fertilizer_type = models.CharField(max_length=256, blank=True)
   fertilizer_freq = models.CharField(max_length=50, blank=True)
-  user = models.ManyToManyField(User, through='Houseplant')
+  def __str__(self):
+    return self.name
+
+
+class User(models.Model):
+  name = models.CharField(max_length=256)
+  email = models.EmailField(max_length=256, blank=True, null=True)
+  username = models.CharField(max_length=256)
+  password = models.CharField(max_length=1024)
+  profile_img = models.CharField(max_length=512, blank=True, null=True)
+  pref_day1 = models.CharField(max_length=50)
+  pref_day2 = models.CharField(max_length=50, blank=True, null=True)
+  plants = models.ManyToManyField(Plant, through='Houseplant')
   def __str__(self):
     return self.name
 
@@ -40,6 +40,7 @@ class Location(models.Model):
   temp = models.CharField(max_length=50, blank=True)
   humidity = models.CharField(max_length=50, blank=True)
   notes = models.TextField(blank=True)
+  plants = models.ManyToManyField(Plant, through='Houseplant')
   def __str__(self):
     return self.name
   
