@@ -50,6 +50,6 @@ class Houseplant(models.Model):
   plant_id = models.ForeignKey(Plant, on_delete=models.CASCADE)
   loc_id = models.ForeignKey(Location, on_delete=models.CASCADE, blank=True)
   img_url = models.CharField(max_length=512, blank=True)
-  notes = models.TextField()
+  notes = models.TextField(blank=True)
 
 
