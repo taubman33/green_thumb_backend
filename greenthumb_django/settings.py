@@ -12,6 +12,13 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 
+from corsheaders.defaults import default_methods
+from corsheaders.defaults import default_headers
+
+from datetime import timedelta   # from students', but ref'd in LevelUp
+import os       # from students', but ref'd in LevelUp
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,7 +32,7 @@ SECRET_KEY = 'django-insecure-t_9s3qge@9g-6vsuj0#w^5%(osfy_)3tqjle_+acdb)f8#+a4c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -40,26 +47,44 @@ INSTALLED_APPS = [
     'greenthumb',
     'rest_framework',
     'corsheaders',
-    
+    'rest_framework_simplejwt.token_blacklist',   # from students' 
+
 ]
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
 
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny'
-        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly'
-    ],
-    # 'DEFAULT_AUTHENTICATION_CLASSES': [
-    #     'rest_framework_simplejwt.authentication.JWTAuthentication'
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.AllowAny'  # working before!!!
+    #     # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    #     # 'rest_framework.permissions.IsAuthenticatedOrReadOnly'
     # ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication' # from students'
+        # 'rest_framework.authentication.BasicAuthentication',  #from levelUp Instr... add in?
+    ],
 }
-# SIMPLE_JWT = {
+# SIMPLE_JWT = {                 ## From LevelUp instr
 #     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
 #     "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
 # }
+# JavaScript Web Token
+SIMPLE_JWT = {                      ## From Students'
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=14),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUTH_HEADER_TYPES': ('JWT',),
+    'USER_ID_FIELD': 'username',
+    'USER_ID_CLAIM': 'username',
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+}
+
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -74,15 +99,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-from corsheaders.defaults import default_methods
-from corsheaders.defaults import default_headers
-
-CORS_ALLOWED_ORIGINS = [
-    # "https://example.com",
-    # "https://sub.example.com",
-    "http://localhost:8080",
-    "http://localhost:3000",
-]
+CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOWED_ORIGINS = [
+#     # "https://example.com",
+#     # "https://sub.example.com",
+#     "http://localhost:8080",
+#     "http://localhost:3000",
+# ]
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8080",
     "http://localhost:3000",
@@ -96,6 +119,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
+        # 'DIRS': ['templates'],  # from LevelUp instr
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -117,13 +141,15 @@ WSGI_APPLICATION = 'greenthumb_django.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'greenthumb',
-        'USER': 'admin',
+        'NAME': 'greenthumb_with_auth',
+        'USER': 'tim',
         'PASSWORD': 'greenthumbadminpw1129',
         'HOST': 'localhost'
     }
 }
 
+#custom User Model
+AUTH_USER_MODEL = 'greenthumb.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -159,7 +185,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
+# both also included in Students' project
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')   # from students/ levelUp instr
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

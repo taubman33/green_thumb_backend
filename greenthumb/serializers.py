@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from .models import User, Plant, Location, Houseplant
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class PlantSerializer(serializers.ModelSerializer):
-
   class Meta:
     model = Plant
     fields = '__all__'
@@ -10,11 +10,34 @@ class PlantSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
   plants = PlantSerializer(many=True, read_only=True)
+
+  # NEW AS OF AUTH SETUP
+  email = serializers.EmailField(required=True)
+  first_name = serializers.CharField()
+  last_name = serializers.CharField()
+  username = serializers.CharField(required=True)
+  password = serializers.CharField(min_length=8, write_only=True)
+
   class Meta:
     model = User
-    
-    fields = [field.name for field in model._meta.fields]
+    fields = ['id','email','first_name','last_name','username','password','profile_img','pref_day1','pref_day2']
+    ## OLD 
+    # fields = [field.name for field in model._meta.fields]
     fields.append('plants')
+
+    ## NEW AS OF AUTH SETUP
+    extra_kwargs = {'write_only': True}
+
+  def create(self, validated_data):
+    password = validated_data.pop('password', None)
+    instance = self.Meta.model(**validated_data)
+    if password is not None:
+        instance.set_password(password)
+    instance.save()
+    return instance
+
+
+    ## VERY OLD OLD
     # fields = '__all__'
     # extra_fields = ['plants']
     

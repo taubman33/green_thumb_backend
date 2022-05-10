@@ -17,9 +17,18 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
 
+# from greenthumb_django import settings      # from LevelUp instr.
+# from django.conf.urls.static import static   # from LevelUp instr.
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('greenthumb.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    
+#     path('api/token/', TokenObtainPairView.as_view(), name = 'token_obtain_pair'),   # from LevelUp instr.
+#     path('login', views.login_view), 
+# ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)  # from LevelUp instr.
 ]
+
+

@@ -1,4 +1,4 @@
-from pyexpat import model
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 # Create your models here.
@@ -18,17 +18,25 @@ class Plant(models.Model):
     return self.name
 
 
-class User(models.Model):
-  name = models.CharField(max_length=256)
-  email = models.EmailField(max_length=256, blank=True, null=True)
-  username = models.CharField(max_length=256)
-  password = models.CharField(max_length=1024)
+class User(AbstractUser):
   profile_img = models.CharField(max_length=512, blank=True, null=True)
-  pref_day1 = models.CharField(max_length=50)
+  pref_day1 = models.CharField(max_length=50, blank=True, null=True)
   pref_day2 = models.CharField(max_length=50, blank=True, null=True)
   plants = models.ManyToManyField(Plant, through='Houseplant')
   def __str__(self):
-    return self.name
+    return self.username
+
+# class User(models.Model):
+#   name = models.CharField(max_length=256)
+#   email = models.EmailField(max_length=256, blank=True, null=True)
+#   username = models.CharField(max_length=256)
+#   password = models.CharField(max_length=1024)
+#   profile_img = models.CharField(max_length=512, blank=True, null=True)
+#   pref_day1 = models.CharField(max_length=50, blank=True, null=True)
+#   pref_day2 = models.CharField(max_length=50, blank=True, null=True)
+#   plants = models.ManyToManyField(Plant, through='Houseplant')
+#   def __str__(self):
+#     return self.name
 
 
 class Location(models.Model):
@@ -51,5 +59,8 @@ class Houseplant(models.Model):
   loc_id = models.ForeignKey(Location, on_delete=models.CASCADE, blank=True)
   img_url = models.CharField(max_length=512, blank=True)
   notes = models.TextField(blank=True)
+
+  class Meta:
+    ordering = ['-id']
 
 
