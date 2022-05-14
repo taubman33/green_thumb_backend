@@ -14,10 +14,10 @@ class UserList(APIView):
     users = User.objects.all()
     return Response(users)
 
-class UserDetail(generics.RetrieveAPIView):
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    lookup_field = 'id'
+    # lookup_field = 'id'
 
 class UserDetailByUsername(generics.RetrieveAPIView):
     queryset = User.objects.all()

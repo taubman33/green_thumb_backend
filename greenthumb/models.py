@@ -19,9 +19,9 @@ class Plant(models.Model):
 
 
 class User(AbstractUser):
-  profile_img = models.CharField(max_length=512, blank=True, null=True)
-  pref_day1 = models.CharField(max_length=50, blank=True, null=True)
-  pref_day2 = models.CharField(max_length=50, blank=True, null=True)
+  profile_img = models.CharField(max_length=512, blank=True, default="")
+  pref_day1 = models.CharField(max_length=50, blank=True, default="")
+  pref_day2 = models.CharField(max_length=50, blank=True, default="")
   plants = models.ManyToManyField(Plant, through='Houseplant')
   def __str__(self):
     return self.username
@@ -59,8 +59,10 @@ class Houseplant(models.Model):
   loc_id = models.ForeignKey(Location, on_delete=models.CASCADE, blank=True)
   img_url = models.CharField(max_length=512, blank=True)
   notes = models.TextField(blank=True)
+  date_created = models.DateTimeField(auto_now_add=True)
+  date_modified = models.DateTimeField(auto_now=True)
 
   class Meta:
-    ordering = ['-id']
+    ordering = ['-id'] # This returns the data ordered with newest at the top
 
 

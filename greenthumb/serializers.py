@@ -17,6 +17,8 @@ class UserSerializer(serializers.ModelSerializer):
   last_name = serializers.CharField()
   username = serializers.CharField(required=True)
   password = serializers.CharField(min_length=8, write_only=True)
+  # profile_img = serializers.CharField(blank=True, default="")
+  # pref_day1 = 1
 
   class Meta:
     model = User

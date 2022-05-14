@@ -142,7 +142,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'greenthumb_with_auth',
-        'USER': 'tim',
+        'USER': 'admin',
         'PASSWORD': 'greenthumbadminpw1129',
         'HOST': 'localhost'
     }
