@@ -10,6 +10,9 @@ from .serializers import UserSerializer, PlantSerializer, LocationSerializer, Ho
 # Create your views here.
 
 class UserList(APIView):
+  permission_classes = (permissions.AllowAny)
+  authentication_classes = ()
+
   def get(self, request):
     users = User.objects.all()
     return Response(users)

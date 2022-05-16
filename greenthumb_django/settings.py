@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '####'
+SECRET_KEY = 'django-insecure-t_9s3qge@9g-6vsuj0#w^5%(osfy_)3tqjle_+acdb)f8#+a4c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -139,14 +139,19 @@ WSGI_APPLICATION = 'greenthumb_django.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'greenthumb_with_auth',
-        'USER': 'admin',
-        'PASSWORD': '####',
-        'HOST': 'localhost'
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'greenthumb_with_auth',
+    #     'USER': 'admin',
+    #     'PASSWORD': 'greenthumbadminpw1129',
+    #     'HOST': 'localhost'
+    # }
 }
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
 
 #custom User Model
 AUTH_USER_MODEL = 'greenthumb.User'
@@ -193,3 +198,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')   # from students/ levelUp instr
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
